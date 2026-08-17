@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TheMuslimLantern Search — Find the Exact Moment</title>
+    <meta
+      name="description"
+      content="Search across TheMuslimLantern videos — ask a question and jump to the exact second it was answered. Runs 100% in your browser with Orama. No servers, no databases."
+    />
+    <meta name="theme-color" content="#060a13" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20x='5.5'%20y='5.5'%20width='13'%20height='13'%20fill='none'%20stroke='%23E8A33D'%20stroke-width='2'/%3E%3Crect%20x='5.5'%20y='5.5'%20width='13'%20height='13'%20fill='none'%20stroke='%23E8A33D'%20stroke-width='2'%20transform='rotate(45%2012%2012)'/%3E%3Ccircle%20cx='12'%20cy='12'%20r='2.2'%20fill='%23E8A33D'/%3E%3C/svg%3E"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Figtree:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      // Apply the saved theme before first paint (dark by default).
+      (function () {
+        try {
+          var saved = localStorage.getItem("tmlantern-theme");
+          var dark = saved ? saved === "dark" : true;
+          document.documentElement.classList.toggle("dark", dark);
+        } catch (e) {
+          document.documentElement.classList.add("dark");
+        }
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-56VHEM8X.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-COyOBBNn.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

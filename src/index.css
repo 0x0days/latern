@@ -1,0 +1,195 @@
+@import "tailwindcss";
+
+/* Class-based dark mode, toggled on <html> and persisted in localStorage */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-display: "Amiri", Georgia, "Times New Roman", serif;
+  --font-sans: "Figtree", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", "SFMono-Regular", Menlo, monospace;
+
+  --animate-lantern-breathe: lantern-breathe 7s ease-in-out infinite;
+  --animate-drift-slow: drift-slow 46s linear infinite;
+  --animate-drift-slower: drift-slow 70s linear infinite reverse;
+  --animate-rise: rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-flame: flame 2.4s ease-in-out infinite;
+  --animate-shimmer: shimmer 1.8s linear infinite;
+}
+
+/* Semantic surface/ink tokens — remapped per theme via CSS variables */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-soft: var(--bg-soft);
+  --color-card: var(--card);
+  --color-card-hi: var(--card-hi);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-brass: var(--brass);
+  --color-brass-hi: var(--brass-hi);
+  --color-brass-soft: var(--brass-soft);
+  --color-teal: var(--teal);
+  --color-teal-soft: var(--teal-soft);
+  --color-ember: var(--ember);
+  --color-ember-soft: var(--ember-soft);
+}
+
+/* ── Daylight: warm paper under the lantern ─────────────────── */
+:root {
+  color-scheme: light;
+  --bg: #f2efe7;
+  --bg-soft: #eae5d8;
+  --card: #fbf9f2;
+  --card-hi: #f4efe2;
+  --line: #ddd6c3;
+  --line-strong: #c6bda4;
+  --ink: #232c44;
+  --ink-soft: #4d5a77;
+  --ink-faint: #828ca4;
+  --brass: #96661a;
+  --brass-hi: #b8841f;
+  --brass-soft: rgba(150, 102, 26, 0.1);
+  --teal: #1f7d6e;
+  --teal-soft: rgba(31, 125, 110, 0.12);
+  --ember: #bc4b33;
+  --ember-soft: rgba(188, 75, 51, 0.1);
+  --glow: rgba(150, 102, 26, 0.32);
+  --glow-line: rgba(150, 102, 26, 0.45);
+  --mark-bg: rgba(150, 102, 26, 0.16);
+  --mark-ink: #6f4c0d;
+  --vignette: rgba(35, 44, 68, 0.09);
+  --halo-1: rgba(184, 132, 31, 0.16);
+  --halo-2: rgba(31, 125, 110, 0.09);
+  --halo-3: rgba(77, 90, 119, 0.1);
+}
+
+/* ── Night: the lantern lit ─────────────────────────────────── */
+.dark {
+  color-scheme: dark;
+  --bg: #060a13;
+  --bg-soft: #0a101d;
+  --card: #0d1526;
+  --card-hi: #121c31;
+  --line: #1c2a45;
+  --line-strong: #2a3d60;
+  --ink: #f2ecdd;
+  --ink-soft: #cfc7b0;
+  --ink-faint: #9d9680;
+  --brass: #e8a33d;
+  --brass-hi: #ffd98a;
+  --brass-soft: rgba(232, 163, 61, 0.12);
+  --teal: #52beac;
+  --teal-soft: rgba(82, 190, 172, 0.12);
+  --ember: #e8705a;
+  --ember-soft: rgba(232, 112, 90, 0.12);
+  --glow: rgba(232, 163, 61, 0.42);
+  --glow-line: rgba(232, 163, 61, 0.55);
+  --mark-bg: rgba(232, 163, 61, 0.26);
+  --mark-ink: #ffe7b0;
+  --vignette: rgba(6, 10, 19, 0.78);
+  --halo-1: rgba(232, 163, 61, 0.13);
+  --halo-2: rgba(82, 190, 172, 0.1);
+  --halo-3: rgba(61, 84, 128, 0.22);
+}
+
+@keyframes lantern-breathe {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.08); }
+}
+@keyframes drift-slow {
+  from { background-position: 0 0; }
+  to { background-position: 560px 560px; }
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes flame {
+  0%, 100% { transform: scaleY(1) translateY(0); opacity: 0.9; }
+  30% { transform: scaleY(1.12) translateY(-0.5px); opacity: 1; }
+  60% { transform: scaleY(0.92) translateY(0.5px); opacity: 0.85; }
+}
+@keyframes shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
+}
+
+html {
+  scrollbar-color: var(--line-strong) var(--bg-soft);
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+
+::selection {
+  background: var(--mark-bg);
+  color: var(--ink);
+}
+
+/* Islamic girih lattice — ambient drifting layer */
+.girih-layer {
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='80'%20height='80'%20viewBox='0%200%2080%2080'%3E%3Cg%20fill='none'%20stroke='%23C9832A'%20stroke-width='1'%3E%3Crect%20x='22'%20y='22'%20width='36'%20height='36'/%3E%3Crect%20x='22'%20y='22'%20width='36'%20height='36'%20transform='rotate(45%2040%2040)'/%3E%3Cpath%20d='M40%200v14M40%2066v14M0%2040h14M66%2040h14'/%3E%3Ccircle%20cx='40'%20cy='40'%20r='3.5'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 80px 80px;
+}
+
+/* Layered ambient washes (colors resolve per theme) */
+.ambient-washes {
+  background-image:
+    radial-gradient(1100px 640px at 50% -12%, var(--halo-1), transparent 62%),
+    radial-gradient(900px 620px at 88% 112%, var(--halo-2), transparent 60%),
+    radial-gradient(700px 500px at 4% 90%, var(--halo-3), transparent 65%);
+}
+
+/* Search shell — glowing border on focus */
+.search-shell {
+  transition: border-color 0.25s ease, box-shadow 0.3s ease, background-color 0.35s ease;
+}
+.search-shell:focus-within {
+  border-color: var(--glow-line);
+  box-shadow:
+    0 0 0 1px var(--glow-line),
+    0 0 48px -8px var(--glow);
+}
+
+/* Highlighted match inside transcript snippets */
+.snippet-mark {
+  background: var(--mark-bg);
+  color: var(--mark-ink);
+  border-bottom: 1px solid var(--glow-line);
+  border-radius: 3px;
+  padding: 0.04em 0.12em;
+  font-weight: 600;
+}
+
+.kbd-key {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1;
+  padding: 4px 7px;
+  border-radius: 6px;
+  border: 1px solid var(--line-strong);
+  border-bottom-width: 2px;
+  background: var(--card);
+  color: var(--ink-soft);
+}
+
+.skeleton-sheen {
+  background: linear-gradient(100deg, var(--card) 40%, var(--card-hi) 50%, var(--card) 60%);
+  background-size: 200% 100%;
+  animation: shimmer 1.8s linear infinite;
+}
+
+.code-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
+}
+.code-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
+.code-scroll::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 8px; }
+.code-scroll::-webkit-scrollbar-track { background: transparent; }
