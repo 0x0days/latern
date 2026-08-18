@@ -6,19 +6,19 @@ import { COLAB_SCRIPT } from "../data/colabScript";
 const STEPS = [
   {
     title: "Run it in Google Colab",
-    body: "Open colab.research.google.com, paste the script into a cell and run it. yt-dlp lists every video on the channel, then youtube-transcript-api pulls the captions.",
+    body: "Open colab.research.google.com, paste the script into a cell and run it. It lists every video on the channel, then pulls the captions with youtube-transcript-api.",
   },
   {
     title: "transcripts.json downloads",
-    body: "The notebook chunks every transcript into 40-word overlapping blocks, each stamped with its start_time, and saves one JSON file, then hands it to you.",
+    body: "Each transcript is split into 40-word overlapping blocks, stamped with its start time, and saved as one JSON file that downloads automatically.",
   },
   {
     title: "Drop it into /public",
-    body: "Replace the sample transcripts.json in the project public folder. That single file is the entire data layer; there is nothing else to configure.",
+    body: "Replace the sample transcripts.json in the project's public folder. That file is the entire data layer — nothing else to configure.",
   },
   {
     title: "Reload the app",
-    body: "On load, the browser fetches the JSON and rebuilds the Orama index in memory in milliseconds. No servers, no API keys, no migrations.",
+    body: "On load, the browser downloads the file and rebuilds the Orama index in memory in milliseconds. Deploy anywhere static, including Netlify.",
   },
 ];
 
@@ -35,26 +35,26 @@ function highlightLine(line: string): ReactNode[] {
     if (match.index > last) parts.push(line.slice(last, match.index));
     if (match[1]) {
       parts.push(
-        <span key={key++} style={{ color: "#ffd98a" }}>
+        <span key={key++} className="text-brass">
           {match[1]}
         </span>,
       );
     } else if (match[2]) {
       parts.push(
-        <span key={key++} className="italic" style={{ color: "#5b6b8c" }}>
+        <span key={key++} className="italic text-ink-faint">
           {match[2]}
         </span>,
       );
       re.lastIndex = line.length;
     } else if (match[3]) {
       parts.push(
-        <span key={key++} style={{ color: "#7fd6c6" }}>
+        <span key={key++} className="text-teal">
           {match[3]}
         </span>,
       );
     } else if (match[4]) {
       parts.push(
-        <span key={key++} style={{ color: "#ffe7b0" }}>
+        <span key={key++} className="text-ink-soft">
           {match[4]}
         </span>,
       );
@@ -100,15 +100,12 @@ export function PipelineTab() {
       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       className="mx-auto w-full max-w-6xl px-4 pt-10 sm:pt-14"
     >
-      <p className="font-mono text-[10.5px] uppercase tracking-[0.32em] text-brass/80">
-        Data ingestion · phase three
-      </p>
-      <h2 className="mt-3 max-w-2xl font-display text-4xl leading-tight text-ink sm:text-5xl">
-        From YouTube to your browser, <em className="text-brass">in one cell.</em>
+      <h2 className="max-w-2xl font-display text-4xl leading-tight text-ink sm:text-5xl">
+        Index the whole channel in one Colab cell.
       </h2>
-      <p className="mt-4 max-w-2xl leading-relaxed text-ink-soft">
-        The app ships with a sample index. To index the real channel, run this script once in a
-        free Google Colab notebook. It generates the exact{" "}
+      <p className="mt-4 max-w-2xl text-ink-soft">
+        The app ships with a small sample index. To search the real library, run this script once
+        in a free Google Colab notebook — it produces the exact{" "}
         <code className="rounded bg-card-hi px-1.5 py-0.5 font-mono text-[13px] text-brass">
           transcripts.json
         </code>{" "}
@@ -142,47 +139,47 @@ export function PipelineTab() {
             ))}
           </ol>
 
-          <div className="mt-8 rounded-xl border border-line bg-card/70 p-4">
+          <div className="mt-8 rounded-xl border border-line bg-card/60 p-4">
             <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-ink-faint">
-              The contract, one video object
+              The data contract
             </p>
             <pre className="code-scroll mt-3 overflow-x-auto font-mono text-[12px] leading-relaxed text-ink-soft">
               {`{
   "id": "1",
-  "video_id": "cvMC08Nnc-o",
-  "title": "Christian Lady In Total Shock…",
+  "video_id": "dQw4w9WgXcQ",
+  "title": "Video title",
   "thumbnail": "https://i.ytimg.com/vi/…/hqdefault.jpg",
   "chunks": [
-    { "start_time": 38, "text": "She stops me on the street…" }
+    { "start_time": 145, "text": "Transcript block…" }
   ]
 }`}
             </pre>
           </div>
 
           <p className="mt-6 rounded-lg border border-teal/25 bg-teal-soft p-4 text-sm leading-relaxed text-teal">
-            <strong className="font-semibold">Why static?</strong> Because the whole search engine
-            lives in the visitor's browser. The JSON file is the only artifact, so it can be hosted
-            anywhere static: GitHub Pages, Netlify, Vercel, S3.
+            <strong className="font-semibold">Why static?</strong> The whole search engine lives in
+            the visitor's browser, so the JSON file is the only artifact. Host it anywhere static —
+            Netlify, GitHub Pages, Vercel or S3.
           </p>
         </div>
 
-        {/* Code panel — a fixed dark editor surface in both themes */}
-        <div className="min-w-0 overflow-hidden rounded-xl border border-line bg-[#0a0e18] shadow-[0_24px_70px_-30px_rgba(0,0,0,0.65)]">
-          <div className="flex flex-wrap items-center gap-3 border-b border-[#1c2a45] bg-[#0d1220] px-4 py-3">
+        {/* Code panel */}
+        <div className="min-w-0 overflow-hidden rounded-xl border border-line bg-bg-soft/80 shadow-[0_24px_70px_-30px_rgba(0,0,0,0.45)]">
+          <div className="flex flex-wrap items-center gap-3 border-b border-line bg-card/80 px-4 py-3">
             <span className="flex gap-1.5" aria-hidden="true">
-              <i className="h-2.5 w-2.5 rounded-full bg-ember/80" />
-              <i className="h-2.5 w-2.5 rounded-full bg-brass/80" />
-              <i className="h-2.5 w-2.5 rounded-full bg-teal/80" />
+              <i className="h-2.5 w-2.5 rounded-full bg-ember/70" />
+              <i className="h-2.5 w-2.5 rounded-full bg-brass/70" />
+              <i className="h-2.5 w-2.5 rounded-full bg-teal/70" />
             </span>
-            <span className="font-mono text-xs text-[#cfd6e6]">generate_transcripts.py</span>
-            <span className="rounded border border-[#2a3d60] px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-[#8a94ad]">
+            <span className="font-mono text-xs text-ink-soft">generate_transcripts.py</span>
+            <span className="rounded border border-line px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-ink-faint">
               Google Colab · Python
             </span>
             <span className="ml-auto flex items-center gap-2">
               <button
                 type="button"
                 onClick={copyScript}
-                className="inline-flex items-center gap-1.5 rounded-md border border-[#2a3d60] bg-[#121c31] px-2.5 py-1.5 font-mono text-[11px] text-[#cfd6e6] transition hover:border-brass/60 hover:text-brass"
+                className="inline-flex items-center gap-1.5 rounded-md border border-line bg-card px-2.5 py-1.5 font-mono text-[11px] text-ink-soft transition hover:border-brass/50 hover:text-brass"
               >
                 {copied ? <Check size={12} className="text-teal" /> : <Copy size={12} />}
                 {copied ? "Copied" : "Copy"}
@@ -190,16 +187,14 @@ export function PipelineTab() {
               <button
                 type="button"
                 onClick={downloadScript}
-                className="inline-flex items-center gap-1.5 rounded-md border border-brass/40 bg-brass/15 px-2.5 py-1.5 font-mono text-[11px] text-brass transition hover:bg-brass/25"
+                className="inline-flex items-center gap-1.5 rounded-md border border-brass/40 bg-brass-soft px-2.5 py-1.5 font-mono text-[11px] text-brass transition hover:border-brass/70"
               >
                 <Download size={12} />
                 Download .py
               </button>
             </span>
           </div>
-          <pre
-            className="code-scroll max-h-[620px] overflow-auto p-4 font-mono text-[12px] leading-[1.65] text-[#cfd6e6] sm:p-5"
-          >
+          <pre className="code-scroll max-h-[620px] overflow-auto p-4 font-mono text-[12px] leading-[1.65] text-ink-soft sm:p-5">
             {COLAB_SCRIPT.split("\n").map((line, i) => (
               <span key={i} className="block min-h-[1.65em]">
                 {highlightLine(line)}

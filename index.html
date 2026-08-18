@@ -3,15 +3,42 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TheMuslimLantern Search — Find the Exact Moment</title>
+    <title>TheMuslimLantern Search — Find the Exact Moment in Any Video</title>
     <meta
       name="description"
-      content="Search across TheMuslimLantern videos — ask a question and jump to the exact second it was answered. Runs 100% in your browser with Orama. No servers, no databases."
+      content="Fan-made search for TheMuslimLantern videos. Ask a question and jump to the exact second it was answered — results open on YouTube at the right timestamp. Runs entirely in your browser."
     />
-    <meta name="theme-color" content="#060a13" />
+    <meta
+      name="keywords"
+      content="TheMuslimLantern, The Muslim Lantern, Muhammed Ali, video search, transcript search, dawah, islam, moments, timestamps"
+    />
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="Fan-made project" />
+    <link rel="canonical" href="https://themuslimlanternsearch.netlify.app/" />
+    <meta name="theme-color" content="#060a13" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f2efe7" media="(prefers-color-scheme: light)" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="TheMuslimLantern Search" />
+    <meta property="og:title" content="TheMuslimLantern Search — Find the Exact Moment" />
+    <meta
+      property="og:description"
+      content="Search across TheMuslimLantern videos and open YouTube at the exact second your question was answered. No servers, no accounts — it all runs in your browser."
+    />
+    <meta property="og:url" content="https://themuslimlanternsearch.netlify.app/" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="TheMuslimLantern Search — Find the Exact Moment" />
+    <meta
+      name="twitter:description"
+      content="Search TheMuslimLantern videos and land on the exact second your question was answered."
+    />
+
     <link
       rel="icon"
-      href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20x='5.5'%20y='5.5'%20width='13'%20height='13'%20fill='none'%20stroke='%23E8A33D'%20stroke-width='2'/%3E%3Crect%20x='5.5'%20y='5.5'%20width='13'%20height='13'%20fill='none'%20stroke='%23E8A33D'%20stroke-width='2'%20transform='rotate(45%2012%2012)'/%3E%3Ccircle%20cx='12'%20cy='12'%20r='2.2'%20fill='%23E8A33D'/%3E%3C/svg%3E"
+      href="image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20x='5.5'%20y='5.5'%20width='13'%20height='13'%20fill='none'%20stroke='%23E8A33D'%20stroke-width='2'/%3E%3Crect%20x='5.5'%20y='5.5'%20width='13'%20height='13'%20fill='none'%20stroke='%23E8A33D'%20stroke-width='2'%20transform='rotate(45%2012%2012)'/%3E%3Ccircle%20cx='12'%20cy='12'%20r='2.2'%20fill='%23E8A33D'/%3E%3C/svg%3E"
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -19,8 +46,65 @@
       href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Figtree:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "TheMuslimLantern Search",
+        "url": "https://themuslimlanternsearch.netlify.app/",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://themuslimlanternsearch.netlify.app/?q={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is this the official website of TheMuslimLantern?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. This is an unofficial, fan-made search tool. The official channel is youtube.com/@TheMuslimLantern. This site only helps you find moments inside the channel's videos faster."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does the search work?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Video transcripts are chunked into short blocks with timestamps and stored in a small JSON file. When you search, the Orama search engine indexes that file entirely inside your browser and returns the best matching moments. No server, no database, no account."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Are my searches stored or tracked?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Everything runs locally in your browser. Your search terms never leave your device, and the site uses no analytics or tracking scripts."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How can new videos be added to the index?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The Data Pipeline page includes a free Google Colab script that fetches the channel's videos and captions, splits them into timestamped chunks, and exports transcripts.json. Drop that file into the public folder and the index rebuilds automatically."
+            }
+          }
+        ]
+      }
+    </script>
+
     <script>
-      // Apply the saved theme before first paint (dark by default).
       (function () {
         try {
           var saved = localStorage.getItem("tmlantern-theme");
@@ -34,6 +118,118 @@
   </head>
   <body>
     <div id="root"></div>
+
+    <!-- Static, crawlable content for search engines and non-JS readers -->
+    <div class="mx-auto max-w-3xl px-6 pb-20 pt-10 text-[15px] leading-relaxed">
+      <section aria-labelledby="about-heading" class="border-t border-line pt-10">
+        <h2 id="about-heading" class="font-display text-3xl text-ink">
+          Search TheMuslimLantern, moment by moment
+        </h2>
+        <p class="mt-4 text-ink-soft">
+          This is a fan-made search tool for
+          <a
+            class="text-brass underline decoration-brass/40 underline-offset-2 hover:decoration-brass"
+            href="https://www.youtube.com/@TheMuslimLantern"
+            target="_blank"
+            rel="noreferrer"
+            >TheMuslimLantern</a
+          >, the YouTube channel of Muhammed Ali. Instead of scrubbing through long videos, type
+          what you are looking for and jump straight to the second it was covered. Every result
+          opens on YouTube at the exact timestamp.
+        </p>
+        <p class="mt-3 text-ink-soft">
+          The whole engine runs in your browser using the open-source Orama search library. There
+          is no server, no account and no tracking — your search terms never leave your device.
+        </p>
+      </section>
+
+      <section aria-labelledby="videos-heading" class="mt-10">
+        <h2 id="videos-heading" class="font-display text-2xl text-ink">Videos in the current index</h2>
+        <ul class="mt-4 space-y-2">
+          <li>
+            <a class="text-ink-soft underline decoration-line-strong underline-offset-4 hover:text-brass" href="https://www.youtube.com/watch?v=cvMC08Nnc-o" target="_blank" rel="noreferrer">Christian Lady In Total Shock After Asking A Muslim Why He's Not Christian!</a>
+          </li>
+          <li>
+            <a class="text-ink-soft underline decoration-line-strong underline-offset-4 hover:text-brass" href="https://www.youtube.com/watch?v=TGTUzypPFHI" target="_blank" rel="noreferrer">Agnostic Lady Questions Muslim On Outdated Laws In Islam</a>
+          </li>
+          <li>
+            <a class="text-ink-soft underline decoration-line-strong underline-offset-4 hover:text-brass" href="https://www.youtube.com/watch?v=fvVrT_WHQxg" target="_blank" rel="noreferrer">Inquisitive Agnostic Grills Muslim On Cousin Marriage And Women's Rights</a>
+          </li>
+          <li>
+            <a class="text-ink-soft underline decoration-line-strong underline-offset-4 hover:text-brass" href="https://www.youtube.com/watch?v=pwUuzBBM4o8" target="_blank" rel="noreferrer">New Convert Questions Muslim On Lack Of Connection With Allah</a>
+          </li>
+          <li>
+            <a class="text-ink-soft underline decoration-line-strong underline-offset-4 hover:text-brass" href="https://www.youtube.com/watch?v=r632sKczYqY" target="_blank" rel="noreferrer">If You're Doing This, There's A Chance Your Kid Leaves Islam</a>
+          </li>
+          <li>
+            <a class="text-ink-soft underline decoration-line-strong underline-offset-4 hover:text-brass" href="https://www.youtube.com/watch?v=roaCplecLjQ" target="_blank" rel="noreferrer">Unhinged Preacher Confronts A Muslim Then This Happens</a>
+          </li>
+          <li>
+            <a class="text-ink-soft underline decoration-line-strong underline-offset-4 hover:text-brass" href="https://www.youtube.com/watch?v=QEeureFKaFM" target="_blank" rel="noreferrer">Wise Christian Questions The Consistency Of The Teachings Of Islam</a>
+          </li>
+          <li>
+            <a class="text-ink-soft underline decoration-line-strong underline-offset-4 hover:text-brass" href="https://www.youtube.com/watch?v=RD5ldMW8TP8" target="_blank" rel="noreferrer">Evangelical Pastor Runs Away After Trying to Convert a Muslim</a>
+          </li>
+        </ul>
+      </section>
+
+      <section aria-labelledby="how-heading" class="mt-10">
+        <h2 id="how-heading" class="font-display text-2xl text-ink">How it works</h2>
+        <h3 class="mt-5 font-semibold text-ink">One JSON file is the whole database</h3>
+        <p class="mt-1.5 text-ink-soft">
+          Transcripts are split into short overlapping blocks, each stamped with the second it
+          starts at, and saved as <span class="font-mono text-[13px] text-brass">transcripts.json</span>.
+          Replacing that single file updates the entire site.
+        </p>
+        <h3 class="mt-5 font-semibold text-ink">Search happens on your device</h3>
+        <p class="mt-1.5 text-ink-soft">
+          On first visit the file is downloaded once and indexed in memory by Orama, with the
+          English stemmer enabled and stop-word removal disabled so specialised terms are matched
+          exactly as people type them.
+        </p>
+        <h3 class="mt-5 font-semibold text-ink">Results open at the exact second</h3>
+        <p class="mt-1.5 text-ink-soft">
+          Every matching block links to
+          <span class="font-mono text-[13px] text-brass">youtube.com/watch?v=…&amp;t=…s</span>, so a
+          click lands you right where the topic is discussed.
+        </p>
+      </section>
+
+      <section aria-labelledby="faq-heading" class="mt-10">
+        <h2 id="faq-heading" class="font-display text-2xl text-ink">Frequently asked questions</h2>
+        <h3 class="mt-5 font-semibold text-ink">Is this the official website of TheMuslimLantern?</h3>
+        <p class="mt-1.5 text-ink-soft">
+          No — this is an unofficial fan-made tool. The official channel is
+          <a class="text-brass underline decoration-brass/40 underline-offset-2" href="https://www.youtube.com/@TheMuslimLantern" target="_blank" rel="noreferrer">youtube.com/@TheMuslimLantern</a>.
+        </p>
+        <h3 class="mt-5 font-semibold text-ink">Are my searches stored or tracked?</h3>
+        <p class="mt-1.5 text-ink-soft">
+          No. Search runs fully in your browser with no analytics and no cookies. Nothing you type
+          is ever uploaded.
+        </p>
+        <h3 class="mt-5 font-semibold text-ink">How can new videos be added?</h3>
+        <p class="mt-1.5 text-ink-soft">
+          Use the free Google Colab script on the
+          <a class="text-brass underline decoration-brass/40 underline-offset-2" href="#pipeline">Data Pipeline page</a>.
+          It fetches the channel's videos and captions, chunks them with timestamps, and exports a
+          new <span class="font-mono text-[13px] text-brass">transcripts.json</span>.
+        </p>
+      </section>
+
+      <footer class="mt-12 border-t border-line pt-6 text-[13px] text-ink-faint">
+        <p>
+          Unofficial fan project — not affiliated with or endorsed by TheMuslimLantern. All videos
+          belong to their creators on YouTube.
+        </p>
+        <p class="mt-2">
+          Built with
+          <a class="underline decoration-line-strong underline-offset-2 hover:text-ink-soft" href="https://orama.com" target="_blank" rel="noreferrer">Orama</a>
+          · runs 100% in your browser · no tracking ·
+          <a class="underline decoration-line-strong underline-offset-2 hover:text-ink-soft" href="#pipeline">Data Pipeline</a>
+        </p>
+      </footer>
+    </div>
+
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

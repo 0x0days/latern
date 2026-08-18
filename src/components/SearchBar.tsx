@@ -40,7 +40,7 @@ export function SearchBar({ value, onChange, onClear, inputRef, status }: Search
             ? "Kindling the lantern…"
             : status === "error"
               ? "Index unavailable"
-              : "Ask anything… e.g. “How to perform Wudu?”"
+              : "Ask anything, e.g. “why is Islam the truth”"
         }
         aria-label="Search TheMuslimLantern videos"
         className="h-full min-w-0 flex-1 bg-transparent text-base text-ink outline-none placeholder:text-ink-faint sm:text-lg"
