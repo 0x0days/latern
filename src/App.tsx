@@ -306,6 +306,18 @@ export default function App() {
                       women in Islam or answers for skeptics, and the matching moments will gather
                       here.
                     </p>
+                    <div className="mt-6 flex max-w-lg flex-wrap justify-center gap-2">
+                      {SUGGESTIONS.map((s) => (
+                        <button
+                          key={s}
+                          type="button"
+                          onClick={() => pickSuggestion(s)}
+                          className="rounded-full border border-line bg-card/60 px-3.5 py-1.5 text-[12.5px] text-ink-soft transition duration-200 hover:-translate-y-0.5 hover:border-brass/50 hover:text-brass"
+                        >
+                          {s}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 )}
 
@@ -368,8 +380,9 @@ export default function App() {
                 {status === "ready" && (
                   <p className="flex flex-wrap items-center justify-center gap-2 px-4 pb-6 text-center text-[12.5px] text-ink-faint">
                     <Database size={13} className="text-teal" />
-                    Results come only from transcripts of this channel. The full library can be
-                    indexed with the
+                    Results come only from the {stats?.videos ?? 0} videos currently in this
+                    index, all from this channel. The full library of 700+ uploads can be added
+                    with the
                     <button
                       type="button"
                       onClick={() => setTab("pipeline")}

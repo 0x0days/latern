@@ -85,13 +85,30 @@ export function useSearch(): UseSearchResult {
         // English stemmer ON, stop-word removal OFF — so Islamic terms like
         // Sabr, Taqwa, Salah, Dhikr are indexed verbatim instead of being
         // filtered out as noise words.
-        const docs = (videos as TranscriptVideo[]).flatMap((video) =>
-          video.chunks.map((chunk) => ({
-            video_id: video.video_id,
-            title: video.title,
-            start_time: chunk.start_time,
-            text: chunk.text,
-          })),
+        // Validate and normalize so a malformed transcripts.json degrades
+        // gracefully instead of breaking the page.
+        const clean = (videos as TranscriptVideo[]).filter(
+          (video) =>
+            video &&
+            typeof video.video_id === "string" &&
+            video.video_id.length > 0 &&
+            Array.isArray(video.chunks),
+        );
+        const docs = clean.flatMap((video) =>
+          (video.chunks ?? [])
+            .filter(
+              (chunk) =>
+                chunk &&
+                typeof chunk.text === "string" &&
+                chunk.text.trim().length > 0 &&
+                Number.isFinite(chunk.start_time),
+            )
+            .map((chunk) => ({
+              video_id: video.video_id,
+              title: typeof video.title === "string" ? video.title : video.video_id,
+              start_time: Math.max(0, Math.floor(chunk.start_time)),
+              text: chunk.text,
+            })),
         );
 
         const db = create({
@@ -129,10 +146,10 @@ export function useSearch(): UseSearchResult {
         }
 
         if (cancelled) return;
-        metaRef.current = new Map((videos as TranscriptVideo[]).map((v) => [v.video_id, v]));
+        metaRef.current = new Map(clean.map((v) => [v.video_id, v]));
         dbRef.current = db;
         setStats({
-          videos: (videos as TranscriptVideo[]).length,
+          videos: clean.length,
           chunks: docs.length,
           indexMs: Math.round(performance.now() - t0),
         });
@@ -159,12 +176,16 @@ export function useSearch(): UseSearchResult {
         return null;
       }
 
+      // Strict matching only: tolerance stays 0 on every pass. Fuzzy typo
+      // guessing was removed on purpose so a search for "Moses" can never
+      // surface "nose". Relevance comes from stemming, title boosts and the
+      // Islamic-term synonym map instead.
       const params = (term: string, exact: boolean): Record<string, unknown> => ({
         term,
-        tolerance: exact ? 0 : 1,
+        tolerance: 0,
         exact,
         limit: 60,
-        boost: { title: 2.2, text: 1 },
+        boost: { title: 2.4, text: 1 },
         properties: ["title", "text"],
       });
 
@@ -192,13 +213,13 @@ export function useSearch(): UseSearchResult {
       }
 
       /* ── Pass 3: Islamic-term synonym expansion ────────────── */
-      if (res.count < WEAK_RESULT_THRESHOLD) {
-        const expanded = expandQueryTerms(query);
-        const expandedTerm = expanded.join(" ");
-        if (expandedTerm && expandedTerm.toLowerCase() !== query.toLowerCase()) {
-          const expandedRes = await runQuery(expandedTerm, false);
-          res = mergeResults(res, expandedRes);
-        }
+      /* Always merged, even when base results exist, so "Moses" also finds
+         chunks that say "Musa" and "Jesus" finds "Isa". */
+      const expanded = expandQueryTerms(query);
+      const expandedTerm = expanded.join(" ");
+      if (expandedTerm && expandedTerm.toLowerCase() !== query.toLowerCase()) {
+        const expandedRes = await runQuery(expandedTerm, false);
+        res = mergeResults(res, expandedRes);
       }
 
       const elapsedMs = Math.max(0.01, performance.now() - t0);
